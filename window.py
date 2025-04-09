@@ -99,11 +99,11 @@ class Window(QWidget):
             task='Pass and Fail Groups'
         elif self.btnOption[4].isChecked():
             self.recoding.leaners.sortAlphabetically()
-            self.write=Groups(self.SavefileName,self.numGroups.value(),self.recoding.leaners,'Alphabet',self.workbook)
+            self.write=Groups(self.SavefileName,self.numGroups.value(),self.recoding.leaners,'Alphabet',self.workbook,'Alphabetical')
             task=f'Groups alphabetically= {self.numGroups.value()} Group(s)'
         elif self.btnOption[5].isChecked():
             self.recoding.leaners.sortByAverage()
-            self.write=Groups(self.SavefileName,self.numGroups.value(),self.recoding.leaners,'Average',self.workbook)
+            self.write=Groups(self.SavefileName,self.numGroups.value(),self.recoding.leaners,'Average',self.workbook,'Average')
             task=f'Groups by Average= {self.numGroups.value()} Group(s)'
         self.labelstatus.setText(self.labelstatus.text()+'\n' +f"Added: {task}")
 

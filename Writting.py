@@ -11,6 +11,13 @@ bold_style = xlwt.XFStyle()
 font = xlwt.Font()
 font.bold = True
 bold_style.font = font
+style = xlwt.XFStyle()
+style.alignment.horz = xlwt.Alignment.HORZ_LEFT
+style.alignment.vert = xlwt.Alignment.VERT_TOP
+
+combined_style = xlwt.XFStyle()
+combined_style.font = bold_style.font  # Assigning only the font from bold_style
+combined_style.alignment = style.alignment  # Assigning the alignment from style
 
 class Pass_Fail:
     def __init__(self, fileName: str, minLevel: int, leaners: LeanerList, workbook):
@@ -21,7 +28,9 @@ class Pass_Fail:
         pass_row = 6
         fail_row = 6
 
-        self.sheetPass.write(0, 0, leaners.name, bold_style)
+        self.sheetPass.write(0, 0, leaners.name,combined_style)
+        self.sheetPass.row(0).height_mismatch = True  # Allow custom height
+        self.sheetPass.row(0).height = 255*5  # Set the height to 24 points (480/20)
         self.sheetPass.write(1, 0, 'Passed Learners', bold_style)
         self.sheetPass.write(2, 0, 'Number Of Learners', bold_style)
         self.sheetPass.write(3, 0, 'Weighting', bold_style)
@@ -30,7 +39,9 @@ class Pass_Fail:
         self.sheetPass.write(5, len(leaners.leaners[0].marks) + 1, 'Report', bold_style)
         self.sheetPass.write(5, len(leaners.leaners[0].marks) + 2, 'Level', bold_style)
 
-        self.sheetFail.write(0, 0, leaners.name, bold_style)
+        self.sheetFail.write(0, 0, leaners.name, combined_style)
+        self.sheetFail.row(0).height_mismatch = True  # Allow custom height
+        self.sheetFail.row(0).height = 255*5  # Set the height to 24 points (480/20)
         self.sheetFail.write(1, 0, 'Failed Learners', bold_style)
         self.sheetFail.write(2, 0, 'Number Of Learners', bold_style)
         self.sheetFail.write(3, 0, 'Weighting', bold_style)
@@ -75,7 +86,7 @@ class Levels:
         self.workBook = workbook
         self.numLevel = [0, 0, 0, 0, 0, 0, 0]
         self.sheet = self.workBook.add_sheet('Levels Analysis')
-        self.sheet.write(0, 0, leaners.name, bold_style)
+        self.sheet.write(0, 0, leaners.name, combined_style)
         for i in range(7):
             self.sheet.write(1, i, f'Level {i+1}', bold_style)
             self.sheet.col(i).width = 256 * 20
@@ -101,7 +112,9 @@ class Top:
 
         row = 6
 
-        self.sheet.write(0, 0, leaners.name, bold_style)
+        self.sheet.write(0, 0, leaners.name, combined_style)
+        self.sheet.row(0).height_mismatch = True  # Allow custom height
+        self.sheet.row(0).height = 255*5  # Set the height to 24 points (480/20)
         self.sheet.write(1, 0, f'{top} learners', bold_style)
         self.sheet.write(2, 0, f'out of {len(leaners)} learners', bold_style)
         self.sheet.write(3, 0, 'Weighting', bold_style)
@@ -124,14 +137,16 @@ class Top:
         self.workBook.save(self.fileName)
 
 class Groups:
-    def __init__(self, fileName: str, numGroups: int, leaners: LeanerList, groupType: str, workbook):
+    def __init__(self, fileName: str, numGroups: int, leaners: LeanerList, groupType: str, workbook,name:str):
         self.fileName = fileName
         self.workBook = workbook
         self.sheets = []
 
         for x in range(numGroups):
-            sheet = self.workBook.add_sheet(f'Group {x + 1}')
-            sheet.write(0, 0, leaners.name, bold_style)
+            sheet = self.workBook.add_sheet(f'{name} Group {x + 1}')
+            sheet.write(0, 0, leaners.name, combined_style)
+            sheet.row(0).height_mismatch = True  # Allow custom height
+            sheet.row(0).height = 255*5  # Set the height to 24 points (480/20)
             sheet.write(1, 0, f'Grouped by {groupType}', bold_style)
             sheet.write(2, 0, f'Group {x + 1}', bold_style)
             sheet.write(3, 0, 'Weighting', bold_style)
